@@ -1,0 +1,47 @@
+let lookback = 7d;
+let base =
+    IntuneOperationalLogs
+    | where TimeGenerated >= ago(lookback)
+    | where OperationName == "Compliance"
+    | extend p = parse_json(Properties)
+    | extend
+        AlertType       = tostring(p.AlertType)
+        ,
+        DeviceHostName   = tostring(p.DeviceHostName)
+        ,
+        IntuneDeviceId   = tostring(p.IntuneDeviceId)
+        ,
+        UserName         = tostring(p.UserName)
+        ,
+        UserDisplayName  = tostring(p.UserDisplayName)
+        ,
+        Desc             = tostring(p.Description)
+    | extend CheckChunks = split(Desc, "$$")
+    | mv-expand CheckChunks
+    | where isempty(CheckChunks) == false
+    | extend T = split(CheckChunks, "||")
+    | extend CheckName = tostring(T[1]), Expected = tostring(T[3]), Actual = tostring(T[4])
+    | extend Status = case(
+                      isempty(Expected) or isempty(Actual),
+                      tostring(AlertType),                       // safety
+                      Expected == Actual,
+                      "Pass",
+                      "Fail"
+                  )
+    | project
+        TimeGenerated,
+        DeviceHostName,
+        IntuneDeviceId,
+        UserName,
+        UserDisplayName,
+        CheckName,
+        Expected,
+        Actual,
+        Status,
+        AlertType;
+// (Optional) compress bursts: keep latest status per 5 minutes to avoid duplicate spam
+let norm = base
+    | summarize arg_max(TimeGenerated, *) by bin(TimeGenerated, 5m), DeviceHostName, IntuneDeviceId, CheckName
+    | project-away TimeGenerated1;
+norm
+

@@ -1,0 +1,170 @@
+openapi: 3.0.1
+info:
+  title: isdfwriter-la
+  description: Azure Logic App.
+  version: '1.0'
+servers:
+  - url: https://APIM_BASE_URL
+paths:
+  /isdf:
+    post:
+      summary: isdf
+      description: Trigger a run of the logic app.
+      operationId: isdf
+      requestBody:
+        description: The request body.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/request-isdf'
+            example:
+              device:
+                aadDeviceId: string
+                hostname: string
+                aadTenantId: string
+              isdf:
+                channel: ISDF:W365
+                ea2: string
+                signalHash: string
+                originTupleHash: string
+                baselineVer: 0
+                timestampUtc: string
+      responses:
+        '200':
+          description: The Logic App successfully processed the payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/isdfPost200ApplicationJsonResponse'
+              example:
+                syncResult: Success
+                processedAtUtc: '2025-08-27T08:15:30.0000000+00:00'
+                echo:
+                  aadDeviceId: d66f6a69-e764-4c42-a4b8-7f538123c517
+        '400':
+          description: The Logic App rejected the payload.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/isdfPost400ApplicationJsonResponse'
+              example:
+                syncResult: Failure
+                error: Invalid signalHash format
+                processedAtUtc: '2025-08-27T08:15:30.0000000+00:00'
+components:
+  schemas:
+    request-isdf:
+      title: ISDF Cloud Sync Request
+      required:
+        - device
+        - isdf
+      type: object
+      properties:
+        device:
+          required:
+            - aadDeviceId
+            - hostname
+            - aadTenantId
+          type: object
+          properties:
+            aadDeviceId:
+              pattern: '^[0-9a-fA-F-]{36}$'
+              type: string
+              description: Entra deviceId (GUID)
+            hostname:
+              minLength: 1
+              type: string
+            aadTenantId:
+              pattern: '^[0-9a-fA-F-]{36}$'
+              type: string
+              description: Entra tenantId (GUID)
+          additionalProperties: false
+        isdf:
+          required:
+            - channel
+            - ea2
+            - signalHash
+            - originTupleHash
+            - baselineVer
+            - timestampUtc
+          type: object
+          properties:
+            channel:
+              enum:
+                - ISDF:W365
+                - ISDF:DevBox
+                - ISDF:AVD
+                - ISDF:DevTestLabs
+                - ISDF:AzureVM
+              type: string
+            ea2:
+              minLength: 1
+              type: string
+              description: Base64 of DPAPI-protected signal blob
+            signalHash:
+              pattern: '^[a-f0-9]{64}$'
+              type: string
+              description: SHA-256 hex of live signal
+            originTupleHash:
+              pattern: '^[a-f0-9]{64}$'
+              type: string
+              description: SHA-256 hex of tuple used to derive key
+            baselineVer:
+              minimum: 1.0
+              type: integer
+            timestampUtc:
+              type: string
+              format: date-time
+          additionalProperties: false
+      additionalProperties: false
+    isdfPost200ApplicationJsonResponse:
+      title: ISDF Cloud Sync Success Response
+      required:
+        - syncResult
+        - processedAtUtc
+        - echo
+      type: object
+      properties:
+        syncResult:
+          enum:
+            - Success
+          type: string
+        processedAtUtc:
+          type: string
+          format: date-time
+        echo:
+          type: object
+          properties:
+            aadDeviceId:
+              pattern: '^[0-9a-fA-F-]{36}$'
+              type: string
+    isdfPost400ApplicationJsonResponse:
+      title: ISDF Cloud Sync Error Response
+      required:
+        - syncResult
+        - error
+        - processedAtUtc
+      type: object
+      properties:
+        syncResult:
+          enum:
+            - Failure
+          type: string
+        error:
+          type: string
+          description: Description of why the sync failed
+        processedAtUtc:
+          type: string
+          format: date-time
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]

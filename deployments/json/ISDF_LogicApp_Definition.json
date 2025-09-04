@@ -1,0 +1,311 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "triggers": {
+            "When_a_HTTP_request_is_received": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {
+                    "method": "POST",
+                    "schema": {
+                        "$schema": "http://json-schema.org/draft-04/schema#",
+                        "title": "ISDF Cloud Sync Request",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "device",
+                            "isdf"
+                        ],
+                        "properties": {
+                            "device": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                    "aadDeviceId",
+                                    "hostname",
+                                    "aadTenantId"
+                                ],
+                                "properties": {
+                                    "aadDeviceId": {
+                                        "type": "string",
+                                        "pattern": "^[0-9a-fA-F-]{36}$",
+                                        "description": "Entra deviceId (GUID)"
+                                    },
+                                    "hostname": {
+                                        "type": "string",
+                                        "minLength": 1
+                                    },
+                                    "aadTenantId": {
+                                        "type": "string",
+                                        "pattern": "^[0-9a-fA-F-]{36}$",
+                                        "description": "Entra tenantId (GUID)"
+                                    }
+                                }
+                            },
+                            "isdf": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                    "channel",
+                                    "ea2",
+                                    "signalHash",
+                                    "originTupleHash",
+                                    "baselineVer",
+                                    "timestampUtc"
+                                ],
+                                "properties": {
+                                    "channel": {
+                                        "type": "string",
+                                        "enum": [
+                                            "ISDF:W365",
+                                            "ISDF:DevBox",
+                                            "ISDF:AVD",
+                                            "ISDF:DevTestLabs",
+                                            "ISDF:AzureVM"
+                                        ]
+                                    },
+                                    "ea2": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "description": "Base64 of DPAPI-protected signal blob"
+                                    },
+                                    "signalHash": {
+                                        "type": "string",
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "description": "SHA-256 hex of live signal"
+                                    },
+                                    "originTupleHash": {
+                                        "type": "string",
+                                        "pattern": "^[a-f0-9]{64}$",
+                                        "description": "SHA-256 hex of tuple used to derive key"
+                                    },
+                                    "baselineVer": {
+                                        "type": "integer",
+                                        "minimum": 1
+                                    },
+                                    "timestampUtc": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "runtimeConfiguration": {
+                    "secureData": {
+                        "properties": [
+                            "inputs",
+                            "outputs"
+                        ]
+                    }
+                }
+            }
+        },
+        "actions": {
+            "Guard": {
+                "actions": {
+                    "Condition": {
+                        "actions": {
+                            "Get_device": {
+                                "type": "Http",
+                                "inputs": {
+                                    "uri": "@{concat('https://graph.microsoft.com/v1.0/devices?$filter=deviceId%20eq%20%27', triggerBody()?['device']?['aadDeviceId'], '%27&$select=id,deviceId,extensionAttributes')}",
+                                    "method": "GET",
+                                    "authentication": {
+                                        "type": "ManagedServiceIdentity",
+                                        "audience": "https://graph.microsoft.com"
+                                    },
+                                    "timeout": "PT60S",
+                                    "retryPolicy": {
+                                        "type": "exponential",
+                                        "count": 3,
+                                        "interval": "PT5S"
+                                    }
+                                }
+                            },
+                            "If_Device_Found": {
+                                "actions": {
+                                    "Compose_device_id": {
+                                        "type": "Compose",
+                                        "inputs": "@{first(body('Get_device')?['value'])?['id']}"
+                                    },
+                                    "Compose_patch_body": {
+                                        "type": "Compose",
+                                        "inputs": {
+                                            "extensionAttributes": {
+                                                "extensionAttribute1": "@{triggerBody()?['isdf']?['originTupleHash']}",
+                                                "extensionAttribute2": "@{triggerBody()?['isdf']?['channel']}",
+                                                "extensionAttribute3": "@{triggerBody()?['isdf']?['signalHash']}",
+                                                "extensionAttribute4": "@{string(triggerBody()?['isdf']?['baselineVer'])}",
+                                                "extensionAttribute5": "@{triggerBody()?['isdf']?['timestampUtc']}"
+                                            }
+                                        }
+                                    },
+                                    "Patch_device": {
+                                        "runAfter": {
+                                            "Compose_patch_body": [
+                                                "Succeeded"
+                                            ],
+                                            "Compose_device_id": [
+                                                "Succeeded"
+                                            ]
+                                        },
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "https://graph.microsoft.com/v1.0/devices/@{outputs('Compose_device_id')}",
+                                            "method": "PATCH",
+                                            "headers": {
+                                                "Content-Type": "application/json"
+                                            },
+                                            "body": "@outputs('Compose_patch_body')",
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "https://graph.microsoft.com"
+                                            },
+                                            "timeout": "PT60S",
+                                            "retryPolicy": {
+                                                "type": "exponential",
+                                                "count": 3,
+                                                "interval": "PT5S"
+                                            }
+                                        }
+                                    },
+                                    "If_Patch_Succeeded": {
+                                        "actions": {
+                                            "Response_200": {
+                                                "runAfter": {
+                                                    "Compose_response": [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "type": "Response",
+                                                "kind": "Http",
+                                                "inputs": {
+                                                    "statusCode": 200,
+                                                    "headers": {
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    "body": "@outputs('Compose_response')"
+                                                }
+                                            },
+                                            "Compose_response": {
+                                                "type": "Compose",
+                                                "inputs": {
+                                                    "syncResult": "Success",
+                                                    "echo": {
+                                                        "aadDeviceId": "@{triggerBody()?['device']?['aadDeviceId']}",
+                                                        "originTupleHash": "@{triggerBody()?['isdf']?['originTupleHash']}",
+                                                        "signalHash": "@{triggerBody()?['isdf']?['signalHash']}"
+                                                    },
+                                                    "processedAtUtc": "@{utcNow()}"
+                                                }
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Patch_device": [
+                                                "Succeeded",
+                                                "Failed",
+                                                "TimedOut"
+                                            ]
+                                        },
+                                        "else": {
+                                            "actions": {
+                                                "Response_500": {
+                                                    "type": "Response",
+                                                    "kind": "Http",
+                                                    "inputs": {
+                                                        "statusCode": 500,
+                                                        "body": {
+                                                            "error": "graph_patch_failed",
+                                                            "status": "@{actionOutputs('Patch_device')?['statusCode']}"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "expression": "@equals(actionOutputs('Patch_device')?['statusCode'], 204)",
+                                        "type": "If"
+                                    }
+                                },
+                                "runAfter": {
+                                    "Get_device": [
+                                        "Succeeded"
+                                    ]
+                                },
+                                "else": {
+                                    "actions": {
+                                        "Response_404": {
+                                            "type": "Response",
+                                            "kind": "Http",
+                                            "inputs": {
+                                                "statusCode": 404,
+                                                "body": {
+                                                    "error": "device_not_found"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "expression": "@greater(length(body('Get_device')?['value']), 0)",
+                                "type": "If"
+                            }
+                        },
+                        "else": {
+                            "actions": {
+                                "Response_400": {
+                                    "type": "Response",
+                                    "kind": "Http",
+                                    "inputs": {
+                                        "statusCode": 400,
+                                        "body": "Illegal Action"
+                                    }
+                                }
+                            }
+                        },
+                        "expression": "@and(greaterOrEquals(utcNow(), addMinutes(triggerBody()?['isdf']?['timestampUtc'], -5)), lessOrEquals(utcNow(), addMinutes(triggerBody()?['isdf']?['timestampUtc'], 5)))",
+                        "type": "If"
+                    }
+                },
+                "runAfter": {},
+                "else": {
+                    "actions": {
+                        "Response_401": {
+                            "type": "Response",
+                            "kind": "Http",
+                            "inputs": {
+                                "statusCode": 401,
+                                "body": {
+                                    "error": "unauthorized"
+                                }
+                            }
+                        }
+                    }
+                },
+                "expression": "@equals(triggerOutputs()?['headers']?['x-from-apim'],'1')",
+                "type": "If"
+            }
+        },
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "type": "Object",
+                "defaultValue": {}
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "type": "Object",
+            "value": {}
+        }
+    },
+    "accessControl": {
+      "triggers": {
+         "sasAuthenticationPolicy": {
+            "state": "Disabled"
+            }
+         }
+     },
+}

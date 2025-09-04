@@ -1,0 +1,52 @@
+{
+    "compute": {
+        "azEnvironment": "AzurePublicCloud",
+        "customData": "",
+        "evictionPolicy": "",
+        "isHostCompatibilityLayerVm": "false",
+        "licenseType": "",
+        "location": "northeurope",
+        "name": "cirriustechd006",
+        "offer": "office-365",
+        "osProfile": {
+            "adminUsername": "cirriustechdev",
+            "computerName": "cirriustechd006",
+            "disablePasswordAuthentication": ""
+        },
+        "osType": "Windows",
+        "placementGroupId": "",
+        "plan": "@{name=; product=; publisher=}",
+        "platformFaultDomain": "0",
+        "platformUpdateDomain": "0",
+        "priority": "",
+        "provider": "Microsoft.Compute",
+        "publicKeys": [],
+        "publisher": "microsoftwindowsdesktop",
+        "resourceGroupName": "CTDTL-cirriustechd006-177562",
+        "resourceId": "/subscriptions/3a8787ba-5b57-4c76-95a1-68b779e50f18/resourceGroups/CTDTL-cirriustechd006-177562/providers/Microsoft.Compute/virtualMachines/cirriustechd006",
+        "securityProfile": {
+            "secureBootEnabled": "false",
+            "virtualTpmEnabled": "false"
+        },
+        "sku": "win10-22h2-avd-m365",
+        "storageProfile": "@{dataDisks=; imageReference=; osDisk=; resourceDisk=}",
+        "subscriptionId": "3a8787ba-5b57-4c76-95a1-68b779e50f18",
+        "tags": "hidden-DevTestLabs-LabUId:67696699-b7d5-4fae-9106-d35db8bc3dd5;hidden-DevTestLabs-LogicalResourceUId:644c5835-1acb-4138-8b54-ca7cf1e8d4fc",
+        "tagsList": [
+            {
+                "name": "hidden-DevTestLabs-LabUId",
+                "value": "67696699-b7d5-4fae-9106-d35db8bc3dd5"
+            },
+            {
+                "name": "hidden-DevTestLabs-LogicalResourceUId",
+                "value": "644c5835-1acb-4138-8b54-ca7cf1e8d4fc"
+            }
+        ],
+        "userData": "",
+        "version": "19045.6216.250812",
+        "vmId": "133653d3-d5ef-40f7-8431-7c137be64160",
+        "vmScaleSetName": "",
+        "vmSize": "Standard_A2_v2",
+        "zone": ""
+    }
+}

@@ -1,0 +1,187 @@
+{
+  "Rules": [
+    {
+      "SettingName": "ISDF_ChannelOk",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#channel",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Unexpected Device Channel",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_TenantIdOK",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#tenant",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Unexpected Tenant",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_AzEnvOk",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#azenv",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Unexpected Cloud Environment",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_HostnameMatchesProvisioned",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#hostname",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Unexpected Hostname",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_SystemManufacturerOk",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#sysman",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Unexpected Device Manufacturer",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_SystemProductNamePrefixOk",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#channelspn",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Unexpected Device Product",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_EA2_Decrypts",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#ea2decrpyt",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Unable to decrypt device signal",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_LiveEqualsDecrypted",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#ea2mismatch",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Mismatch between computed and stored signals",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_WebhookConfigured",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#webhook",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Webhook for CloudSync not Configured",
+          "Description": "Speak to your Device Administrators"
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_WebhookLastOk",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#webhookLastOk",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Last cloud sync not ok",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_EA1_Matches",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#ea1mismatch",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Mismatch between computed and stored signals",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_EA2_Matches",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#ea2mismatch",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Mismatch between computed and stored signals",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    },
+    {
+      "SettingName": "ISDF_LastSyncFresh",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://contoso.example/isdf#syncStale",
+      "RemediationStrings": [
+        {
+          "Language": "en_US",
+          "Title": "Stale cloud sync",
+          "Description": "Suspected malicious device."
+        }
+      ]
+    }
+  ],
+  "Operator": "AND"
+}

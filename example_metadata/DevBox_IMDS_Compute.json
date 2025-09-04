@@ -1,0 +1,57 @@
+{
+    "compute": {
+        "azEnvironment": "AzurePublicCloud",
+        "customData": "",
+        "evictionPolicy": "",
+        "isHostCompatibilityLayerVm": "true",
+        "licenseType": "Windows_Client",
+        "location": "uksouth",
+        "name": "CPC_eee378bd-682c-4e58-806e-a20f89b99ed2",
+        "offer": "windows-ent-cpc",
+        "osProfile": {
+            "adminUsername": "BuiltInAdmin",
+            "computerName": "CPC-Devel-Z3VSP",
+            "disablePasswordAuthentication": ""
+        },
+        "osType": "Windows",
+        "placementGroupId": "",
+        "plan": {
+            "name": "",
+            "product": "",
+            "publisher": ""
+        },
+        "platformFaultDomain": "0",
+        "platformUpdateDomain": "0",
+        "priority": "",
+        "provider": "Microsoft.Compute",
+        "publicKeys": [],
+        "publisher": "microsoftwindowsdesktop",
+        "resourceGroupName": "PREU02_0518dadc-7097-4040-a5f1-1b144bc91b82",
+        "resourceId": "/subscriptions/ae59cb32-ffef-4f19-966f-8a595664535b/resourceGroups/PREU02_0518dadc-7097-4040-a5f1-1b144bc91b82/providers/Microsoft.Compute/virtualMachines/CPC_eee378bd-682c-4e58-806e-a20f89b99ed2",
+        "securityProfile": {
+            "secureBootEnabled": "true",
+            "virtualTpmEnabled": "true"
+        },
+        "sku": "win11-24H2-ent-cpc",
+        "storageProfile": {
+            "dataDisks": "",
+            "imageReference": "@{id=; offer=windows-ent-cpc; publisher=microsoftwindowsdesktop; sku=win11-24H2-ent-cpc; version=26100.4656.250712}",
+            "osDisk": "@{caching=ReadWrite; createOption=FromImage; diffDiskSettings=; diskSizeGB=256; encryptionSettings=; image=; managedDisk=; name=CPC_eee378bd-682c-4e58-806e-a20f89b99ed2; osType=Windows; vhd=; writeAcceleratorEnabled=false}",
+            "resourceDisk": "@{size=9728}"
+        },
+        "subscriptionId": "ae59cb32-ffef-4f19-966f-8a595664535b",
+        "tags": "ms.inv.v0.backedby.origin.sourcearmid.0:/subscriptions/3a8787ba-5b57-4c76-95a1-68b779e50f18/resourceGroups/dvbx-01-rg/providers/Microsoft.DevCenter/devcenters/dvbx01;ms.inv.v0.backedby.origin.tenantid:d980314b-cb2f-44e3-9ce7-06d7361ab382;ms.inv.v0.backedby.resourceattributes:companyname: Cirriustech;ms.inv.v0.security.ownerrole:OsImagePatching, SecurityMonitoring, ApplicationPatching, CodeIntegrity",
+        "tagsList": [
+            "@{name=ms.inv.v0.backedby.origin.sourcearmid.0; value=/subscriptions/3a8787ba-5b57-4c76-95a1-68b779e50f18/resourceGroups/dvbx-01-rg/providers/Microsoft.DevCenter/devcenters/dvbx01}",
+            "@{name=ms.inv.v0.backedby.origin.tenantid; value=d980314b-cb2f-44e3-9ce7-06d7361ab382}",
+            "@{name=ms.inv.v0.backedby.resourceattributes; value=companyname: Cirriustech}",
+            "@{name=ms.inv.v0.security.ownerrole; value=OsImagePatching, SecurityMonitoring, ApplicationPatching, CodeIntegrity}"
+        ],
+        "userData": "",
+        "version": "26100.4656.250712",
+        "vmId": "3485b63b-53c7-4346-ac80-25bc4da88ff2",
+        "vmScaleSetName": "",
+        "vmSize": "Standard_D8as_v5",
+        "zone": ""
+    }
+}

@@ -1,0 +1,75 @@
+{
+    "azEnvironment": "AzurePublicCloud",
+    "customData": "",
+    "evictionPolicy": "",
+    "isHostCompatibilityLayerVm": "false",
+    "licenseType": "Windows_Client",
+    "location": "northeurope",
+    "name": "CT-AVD-SH-0",
+    "offer": "windows-10",
+    "osProfile": {
+        "adminUsername": "Minad",
+        "computerName": "CT-AVD-SH-0",
+        "disablePasswordAuthentication": ""
+    },
+    "osType": "Windows",
+    "placementGroupId": "",
+    "plan": {
+        "name": "",
+        "product": "",
+        "publisher": ""
+    },
+    "platformFaultDomain": "0",
+    "platformUpdateDomain": "0",
+    "priority": "",
+    "provider": "Microsoft.Compute",
+    "publicKeys": [],
+    "publisher": "microsoftwindowsdesktop",
+    "resourceGroupName": "CT-AVD-NEU-RG",
+    "resourceId": "/subscriptions/3a8787ba-5b57-4c76-95a1-68b779e50f18/resourceGroups/CT-AVD-NEU-RG/providers/Microsoft.Compute/virtualMachines/CT-AVD-SH-0",
+    "securityProfile": {
+        "secureBootEnabled": "false",
+        "virtualTpmEnabled": "false"
+    },
+    "sku": "win10-22h2-ent-g2",
+    "storageProfile": {
+        "dataDisks": [],
+        "imageReference": {
+            "id": "",
+            "offer": "windows-10",
+            "publisher": "microsoftwindowsdesktop",
+            "sku": "win10-22h2-ent-g2",
+            "version": "latest"
+        },
+        "osDisk": {
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "diffDiskSettings": "@{option=}",
+            "diskSizeGB": "128",
+            "encryptionSettings": "@{enabled=false}",
+            "image": "@{uri=}",
+            "managedDisk": "@{id=/subscriptions/3a8787ba-5b57-4c76-95a1-68b779e50f18/resourceGroups/CT-AVD-NEU-RG/providers/Microsoft.Compute/disks/CT-AVD-SH-0_OsDisk_1_7174e89371ee497b9d38653f5d3dd043; storageAccountType=StandardSSD_LRS}",
+            "name": "CT-AVD-SH-0_OsDisk_1_7174e89371ee497b9d38653f5d3dd043",
+            "osType": "Windows",
+            "vhd": "@{uri=}",
+            "writeAcceleratorEnabled": "false"
+        },
+        "resourceDisk": {
+            "size": "0"
+        }
+    },
+    "subscriptionId": "3a8787ba-5b57-4c76-95a1-68b779e50f18",
+    "tags": "cm-resource-parent:/subscriptions/3a8787ba-5b57-4c76-95a1-68b779e50f18/resourceGroups/CT-AVD-NEU-RG/providers/Microsoft.DesktopVirtualization/hostpools/CT-AVD-NEU-PL",
+    "tagsList": [
+        {
+            "name": "cm-resource-parent",
+            "value": "/subscriptions/3a8787ba-5b57-4c76-95a1-68b779e50f18/resourceGroups/CT-AVD-NEU-RG/providers/Microsoft.DesktopVirtualization/hostpools/CT-AVD-NEU-PL"
+        }
+    ],
+    "userData": "",
+    "version": "19045.6216.250808",
+    "vmId": "afc217ad-62ff-449b-907c-e863590a215e",
+    "vmScaleSetName": "",
+    "vmSize": "Standard_D2ads_v6",
+    "zone": ""
+}

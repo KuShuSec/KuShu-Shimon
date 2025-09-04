@@ -1,0 +1,40 @@
+let lookback = 7d;
+IntuneOperationalLogs
+| where TimeGenerated >= ago(lookback)
+| where OperationName == "Compliance"
+| extend p = parse_json(Properties)
+| extend
+    AlertType       = tostring(p.AlertType)
+    ,
+    AlertDisplayName = tostring(p.AlertDisplayName)
+    ,
+    Description      = tostring(p.Description)
+    ,
+    DeviceHostName   = tostring(p.DeviceHostName)
+    ,
+    DeviceNetBIOS    = tostring(p.DeviceNetBiosName)
+    ,
+    DeviceOS         = tostring(p.DeviceOperatingSystem)
+    ,
+    IntuneDeviceId   = tostring(p.IntuneDeviceId)
+    ,
+    UserName         = tostring(p.UserName)
+    ,
+    UserDisplayName  = tostring(p.UserDisplayName)
+    ,
+    UPNSuffix        = tostring(p.UPNSuffix)
+| where AlertType =~ "Managed Device Not Compliant"
+| project
+    TimeGenerated,
+    DeviceHostName,
+    DeviceNetBIOS,
+    DeviceOS,
+    IntuneDeviceId,
+    UserDisplayName,
+    UserName,
+    UPNSuffix,
+    AlertType,
+    AlertDisplayName,
+    Description
+| order by TimeGenerated desc
+

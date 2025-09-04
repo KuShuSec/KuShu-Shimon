@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "apis_isdfwriter_la_path": {
+            "value": null
+        },
+        "backends_isdf_be_pool_url": {
+            "value": null
+        },
+        "backends_isdf_be_pool_protocol": {
+            "value": null
+        },
+        "properties_68acad0fbb1eff4b373a9fc6_value": {
+            "value": null
+        },
+        "subscriptions_68ac83b840fa460066070001_displayName": {
+            "value": null
+        },
+        "subscriptions_68ac83b840fa460066070002_displayName": {
+            "value": null
+        },
+        "users_1_lastName": {
+            "value": null
+        },
+        "service_isdf_apim_01_name": {
+            "value": null
+        }
+    }
+}

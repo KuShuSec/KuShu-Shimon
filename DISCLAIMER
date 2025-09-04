@@ -1,0 +1,13 @@
+DISCLAIMER
+
+KuShu-Shimon (Intune Stateful Device Fingerprinting, ISDF) is provided
+“as is” without warranty of any kind, express or implied. The author
+makes no guarantees regarding accuracy, reliability, security, or
+fitness for a particular purpose.
+
+This project is a research and educational reference. It is not an
+official Microsoft product and is not affiliated with or endorsed by
+Microsoft Corporation.
+
+Use at your own risk. You are responsible for reviewing, testing,
+and securing any deployment of this code in your own environment.
